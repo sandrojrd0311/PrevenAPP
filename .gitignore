@@ -40,3 +40,16 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Builds de Android / iOS
+android/app/build/
+android/.gradle/
+ios/Pods/
+ios/build/
+*.DS_Store
+
+# Archivos de entorno o locales
+.env
+.expo/
+dist/
+build/

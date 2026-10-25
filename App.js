@@ -14,11 +14,17 @@ import { COURSES } from './src/data';
 import { Store } from './src/store';
 import { C, glow } from './src/theme';
 import { Ring, Toast } from './src/ui';
+<<<<<<< HEAD
 import { ThemeProvider, useTheme } from './src/ThemeContext';
 import {
   Audit,
   CoursesCatalog,
   Configuracion,
+=======
+import {
+  Audit,
+  CoursesCatalog,
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
   Credits,
   Detail,
   Exam,
@@ -37,13 +43,18 @@ const L = 'ABC';
 export default function App() {
   return (
     <SafeAreaProvider>
+<<<<<<< HEAD
       <ThemeProvider>
         <Root />
       </ThemeProvider>
+=======
+      <Root />
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
     </SafeAreaProvider>
   );
 }
 
+<<<<<<< HEAD
 const NavBtn = ({ on, lock, onPress, children }) => (
   <Pressable onPress={onPress} style={[s.nb, on && s.nbOn, lock && { opacity: 0.5 }]}>
     {children}
@@ -53,6 +64,10 @@ const NavBtn = ({ on, lock, onPress, children }) => (
 function Root() {
   const ins = useSafeAreaInsets();
   const { colors, dark } = useTheme();
+=======
+function Root() {
+  const ins = useSafeAreaInsets();
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
   const { width, height } = useWindowDimensions();
   const [screen, setScreen] = useState('login');
   const [user, setUser] = useState(null);
@@ -78,12 +93,19 @@ function Root() {
 
   const unlocked = () =>
     !LOCK_EXAM ||
+<<<<<<< HEAD
     Boolean(user?.isAdmin) ||
+=======
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
     currentCourse.modules.every((_, i) => (progRef.current[currentCourse.id] || {})[i] === 'done');
 
   const show = async (id) => {
     if (id === 'exam') setExamKey((k) => k + 1);
+<<<<<<< HEAD
     if (id === 'audit') setAttempts(await Store.attempts(Boolean(user?.isAdmin)));
+=======
+    if (id === 'audit') setAttempts(await Store.attempts());
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
     setNavOpen(false);
     setScreen(id);
   };
@@ -112,8 +134,12 @@ function Root() {
     show('exam');
   };
 
+<<<<<<< HEAD
   const logout = async () => {
     await Store.logout();
+=======
+  const logout = () => {
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
     setUser(null);
     progRef.current = {};
     setAllProg({});
@@ -129,6 +155,7 @@ function Root() {
 
   /* ---- Login / Registro ---- */
   const doLogin = async (c, pass) => {
+<<<<<<< HEAD
     try {
       const found = await Store.find(c);
       if (!found) {
@@ -149,6 +176,24 @@ function Root() {
     } catch (err) {
       toast(err.message);
     }
+=======
+    const found = await Store.find(c);
+    if (!found) {
+      setPrefill(c);
+      toast('Ese usuario no existe. Regístrate para iniciar tus cursos.');
+      return show('register');
+    }
+    const u = await Store.login(c, pass);
+    if (!u) return toast('Contraseña incorrecta. Inténtalo de nuevo.');
+
+    // Cargar progreso de todos los cursos para este usuario
+    const courseIds = COURSES.map((cr) => cr.id);
+    const p = await Store.getAllCoursesProgress(u.cedula, courseIds);
+    progRef.current = p;
+    setAllProg(p);
+    setUser(u);
+    show('courses');
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
   };
 
   const doRegister = async (u) => {
@@ -187,6 +232,7 @@ function Root() {
     const nota = Math.round((ok / ids.length) * 100);
     const aprobada = nota >= 80;
 
+<<<<<<< HEAD
     try {
       await Store.saveAttempt({
         cedula: user.cedula,
@@ -201,6 +247,18 @@ function Root() {
     } catch (err) {
       toast('No se pudo guardar el intento: ' + err.message);
     }
+=======
+    await Store.saveAttempt({
+      cedula: user.cedula,
+      courseId: course.id,
+      courseTitle: course.title,
+      fecha: new Date().toISOString(),
+      intento: prev.length + 1,
+      nota,
+      estado: aprobada ? 'Aprobada' : 'Reprobada',
+      d,
+    });
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
 
     setResult({
       nota,
@@ -209,6 +267,7 @@ function Root() {
       n: prev.length + 1,
       courseTitle: course.title,
       best: Math.max(nota, ...prev.map((a) => a.nota)),
+<<<<<<< HEAD
       // Datos para el certificado PDF (solo se usa si aprobó)
       cert: {
         nombre: [user.nombres, user.apellidos].filter(Boolean).join(' '),
@@ -219,6 +278,8 @@ function Root() {
         fecha: new Date().toISOString(),
         intento: prev.length + 1,
       },
+=======
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
     });
     show('result');
   };
@@ -257,11 +318,17 @@ function Root() {
               ? 'audit'
               : '';
 
+<<<<<<< HEAD
   const initials = user?.isAdmin
     ? 'AD'
     : user
       ? (((user.nombres || '?')[0] || '?') + (user.apellidos ? user.apellidos[0] : '')).toUpperCase()
       : 'OP';
+=======
+  const initials = user
+    ? (user.nombres[0] + (user.apellidos ? user.apellidos[0] : '')).toUpperCase()
+    : 'OP';
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
   const maxW = width >= 700 ? 780 : 540;
 
   let body = null;
@@ -347,7 +414,10 @@ function Root() {
           onRetry={() => show('exam')}
           go={show}
           onBackCourses={() => show('courses')}
+<<<<<<< HEAD
           toast={toast}
+=======
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
         />
       );
       break;
@@ -355,7 +425,10 @@ function Root() {
     case 'audit':
       body = (
         <Audit
+<<<<<<< HEAD
           user={user}
+=======
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
           attempts={attempts}
           onOpen={(at) => {
             setDetail(at);
@@ -378,6 +451,7 @@ function Root() {
       body = <Credits onBackCourses={() => show('courses')} />;
       break;
 
+<<<<<<< HEAD
     case 'config':
       body = <Configuracion onBack={() => show('courses')} />;
       break;
@@ -390,6 +464,25 @@ function Root() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <StatusBar style={showBar || dark ? 'light' : 'dark'} />
+=======
+    default:
+  }
+
+  const NavBtn = ({ on, lock, onPress, children }) => (
+    <Pressable
+      onPress={onPress}
+      style={[s.nb, on && s.nbOn, lock && { opacity: 0.5 }]}
+    >
+      {children}
+    </Pressable>
+  );
+
+  const nt = (on) => [s.nbT, on && { color: currentCourse.color || C.blue }];
+
+  return (
+    <View style={{ flex: 1, backgroundColor: C.bg }}>
+      <StatusBar style={showBar ? 'light' : 'dark'} />
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
       {showBar ? (
         <>
           <View style={[s.hdrWrap, { paddingTop: ins.top }]}>
@@ -415,6 +508,7 @@ function Root() {
                   glowColor={currentCourse.glowColor}
                 />
                 <View>
+<<<<<<< HEAD
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                     <Text style={s.logoT}>PrevenApp</Text>
                     {user?.isAdmin && (
@@ -425,12 +519,18 @@ function Root() {
                   </View>
                   <Text style={s.logoS}>
                     {screen === 'courses' ? (user?.isAdmin ? 'Panel de Administración SST' : 'Sistema Integral SST') : currentCourse.code}
+=======
+                  <Text style={s.logoT}>PrevenApp</Text>
+                  <Text style={s.logoS}>
+                    {screen === 'courses' ? 'Sistema Integral SST' : currentCourse.code}
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
                   </Text>
                 </View>
               </Pressable>
 
               {/* Avatar Cuadrado con bordes afilados y glow */}
               <Pressable
+<<<<<<< HEAD
                 style={[
                   s.avatar,
                   user?.isAdmin && { borderColor: C.neonAmber, backgroundColor: '#1A180E' },
@@ -446,6 +546,13 @@ function Root() {
                     fontSize: 13,
                   }}
                 >
+=======
+                style={[s.avatar, glow(C.cyan, 0.4, 6)]}
+                onPress={logout}
+                accessibilityLabel="Cerrar sesión del operador"
+              >
+                <Text style={{ color: C.cyan, fontWeight: '900', fontSize: 13 }}>
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
                   {initials}
                 </Text>
               </Pressable>
@@ -453,11 +560,16 @@ function Root() {
 
             {/* Menú Desplegable con bordes rectos y glow */}
             {navOpen && (
+<<<<<<< HEAD
               <View style={[s.dd, glow(user?.isAdmin ? C.neonAmber : C.cyan, 0.45, 12)]}>
+=======
+              <View style={[s.dd, glow(C.cyan, 0.45, 12)]}>
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
                 <ScrollView
                   style={{ maxHeight: height - 70 - ins.top }}
                   contentContainerStyle={{ padding: 10, gap: 4 }}
                 >
+<<<<<<< HEAD
                   {user?.isAdmin && (
                     <View style={s.adminMenuNotice}>
                       <Text style={s.adminMenuNoticeTxt}>⚡ MODO ADMINISTRADOR ACTIVO</Text>
@@ -465,6 +577,8 @@ function Root() {
                     </View>
                   )}
 
+=======
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
                   <NavBtn on={a === 'courses'} onPress={() => show('courses')}>
                     <Text style={nt(a === 'courses')}>Todos los Cursos</Text>
                   </NavBtn>
@@ -517,9 +631,12 @@ function Root() {
                   <NavBtn onPress={() => show('credits')}>
                     <Text style={nt(false)}>Créditos</Text>
                   </NavBtn>
+<<<<<<< HEAD
                   <NavBtn on={screen === 'config'} onPress={() => show('config')}>
                     <Text style={nt(screen === 'config')}>Configuración</Text>
                   </NavBtn>
+=======
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
                   <NavBtn onPress={logout}>
                     <Text style={[nt(false), { color: C.red }]}>Cerrar Sesión</Text>
                   </NavBtn>
@@ -685,6 +802,7 @@ const s = StyleSheet.create({
     color: '#94A3B8',
     letterSpacing: 0.5,
   },
+<<<<<<< HEAD
   adminHdrBadge: {
     backgroundColor: 'rgba(255, 179, 0, 0.2)',
     borderWidth: 1,
@@ -718,4 +836,6 @@ const s = StyleSheet.create({
     fontSize: 10,
     marginTop: 2,
   },
+=======
+>>>>>>> 5924f0d9d0b561112d54456e19df650f671ba442
 });
